@@ -6,13 +6,13 @@
 #    By: msukhare <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/03 15:51:13 by msukhare          #+#    #+#              #
-#    Updated: 2019/12/03 16:00:42 by msukhare         ###   ########.fr        #
+#    Updated: 2019/12/03 17:22:41 by msukhare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_PATH = srcs/
 
-SRC_NAME = ft_malloc.c
+SRC_NAME = malloc.c
 
 OBJ_PATH = objs/
 
