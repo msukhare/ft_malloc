@@ -6,7 +6,7 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 10:48:40 by msukhare          #+#    #+#             */
-/*   Updated: 2019/12/16 17:14:55 by msukhare         ###   ########.fr       */
+/*   Updated: 2019/12/17 19:46:22 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,26 @@ void			*create_new_block_at_end(t_pages *page, size_t size)
 	return ((void *)(iterator->next) + sizeof(t_blocks));
 }
 
+void			*split_blocks(t_blocks *to_split, size_t size, t_pages *page)
+{
+	t_blocks	*new;
+
+	to_split->allocated = 1;
+	if (size + sizeof(t_blocks) + 16 > to_split->size)
+		return ((void *)(to_split) + sizeof(t_blocks));
+	new = (t_blocks *)((void *)(to_split) + sizeof(t_blocks) + size);
+	new->allocated = 0;
+	new->size = to_split->size - (size + sizeof(t_blocks));
+	new->next = to_split->next;
+	to_split->next = new;
+	new->before = to_split;
+	if (new->next)
+		new->next->before = new;
+	to_split->size = size;
+	page->size -= sizeof(t_blocks);
+	return ((void *)(to_split) + sizeof(t_blocks));
+}
+
 void			*get_allocated_page(t_pages *page, size_t size)
 {
 	t_blocks	*to_ret;
@@ -39,10 +59,7 @@ void			*get_allocated_page(t_pages *page, size_t size)
 		while (to_ret)
 		{
 			if (to_ret->allocated == 0 && to_ret->size >= size)
-			{
-				//split
-				return ((void *)to_ret + sizeof(t_blocks));
-			}
+				return (split_blocks(to_ret, size, page));
 			to_ret = to_ret->next;
 		}
 		if ((long long)(page->size - (size + sizeof(t_blocks))) >= 0)

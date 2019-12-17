@@ -6,7 +6,7 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:46:56 by msukhare          #+#    #+#             */
-/*   Updated: 2019/12/16 17:10:13 by msukhare         ###   ########.fr       */
+/*   Updated: 2019/12/17 15:22:45 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,30 +17,7 @@ t_pages_allocated	g_pages_allocated = {NULL, NULL, NULL};
 void				*ft_malloc(size_t size)
 {
 	void			*to_ret;
-	/*
-	t_pages			*page;
-	t_blocks		*block;
 
-	page = g_pages_allocated.tiny_page;
-	while (page)
-	{
-		block = page->blocks;
-		ft_putstr("\x1b[31m page_size = ");
-		ft_putnbr(page->size);
-		ft_putstr("\x1b[0m\n");
-		while (block)
-		{
-			ft_putstr("\x1b[32m block_size = ");
-			ft_putnbr(block->size);
-			ft_putstr("; blocks allocated =");
-			ft_putnbr(block->allocated);
-			ft_putstr("\x1b[0m\n");
-			block = block->next;
-		}
-		ft_putstr("\n\n");
-		page = page->next;
-	}
-	*/
 	if (size <= 0)
 		return (NULL);
 	if (size <= TINY)
