@@ -27,8 +27,13 @@
 
 # define ALIGNEMENT 16
 
-# define PROTECTION (PROT_READ | PROT_WRITE)
-# define FLAGS (MAP_ANONYMOUS | MAP_SHARED)
+# define PROTECTION 		(PROT_READ | PROT_WRITE)
+# define FLAGS 				(MAP_SHARED | MAP_ANONYMOUS)
+
+# define COLOR_TINY 		"\x1b[31m"
+# define COLOR_SMALL		"\x1b[32m"
+# define COLOR_LARGE 		"\x1b[33m"
+# define END_COLOR 			"\x1b[0m"
 
 /* Create all structurs which are useful*/
 
@@ -61,10 +66,14 @@ extern t_pages_allocated	g_pages_allocated;
 void						*allocate_page(t_pages **page, size_t type,
 		size_t size);
 void						*get_allocated_page(t_pages *page, size_t size);
+t_pages						*get_main_page_of_block(t_blocks *to_free);
+void	put_memory_hexa(size_t adress);
+void	read_ptr(void *ptr, size_t size, char *mess);
 
 /*functions of librairy */
-void						ft_free(void *ptr);
-void						*ft_malloc(size_t size);
-//void						*realloc(void *ptr, size_t size);
+void						free(void *ptr);
+void						*malloc(size_t size);
+void						*realloc(void *ptr, size_t size);
 void						show_alloc_mem();
+void						*calloc(size_t nmemb, size_t size);
 #endif

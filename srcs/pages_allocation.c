@@ -50,7 +50,10 @@ void		*allocate_page(t_pages **page, size_t type, size_t size)
 	t_pages	*iterator;
 
 	if (!(new_page = create_new_page(size, calculate_global_size(type, size))))
+	{
+		ft_putstr("return NULL\n");
 		return (NULL);
+	}
 	iterator = *page;
 	if (!*page)
 		*page = new_page;
@@ -61,5 +64,7 @@ void		*allocate_page(t_pages **page, size_t type, size_t size)
 		iterator->next = new_page;
 		new_page->before = iterator;
 	}
+	//read_ptr((void *)(new_page->blocks) + sizeof(t_blocks), size, "new alloc page\n");
+	//ft_putstr("return mmaped ptr\n");
 	return ((void *)(new_page->blocks) + sizeof(t_blocks));
 }

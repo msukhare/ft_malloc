@@ -16,6 +16,7 @@ void			*create_new_block_at_end(t_pages *page, size_t size)
 {
 	t_blocks	*iterator;
 
+	ft_putstr("create new block\n");
 	iterator = page->blocks;
 	while (iterator->next)
 		iterator = iterator->next;
@@ -33,9 +34,13 @@ void			*split_blocks(t_blocks *to_split, size_t size, t_pages *page)
 {
 	t_blocks	*new;
 
+	ft_putstr("split block\n");
 	to_split->allocated = 1;
 	if (size + sizeof(t_blocks) + 16 > to_split->size)
+	{
+		ft_putstr("don't split block \n");
 		return ((void *)(to_split) + sizeof(t_blocks));
+	}
 	new = (t_blocks *)((void *)(to_split) + sizeof(t_blocks) + size);
 	new->allocated = 0;
 	new->size = to_split->size - (size + sizeof(t_blocks));
@@ -66,5 +71,6 @@ void			*get_allocated_page(t_pages *page, size_t size)
 			return (create_new_block_at_end(page, size));
 		page = page->next;
 	}
+	ft_putstr("return NULL in get allocated page\n");
 	return (NULL);
 }

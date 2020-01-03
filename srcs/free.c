@@ -12,12 +12,23 @@
 
 #include "../includes/malloc.h"
 
-void			free_tiny_and_small_page(t_blocks *to_free, t_pages *page)
+t_pages			*get_main_page_of_block(t_blocks *to_free)
 {
-	to_free->allocated = 0;
+	void		*to_ret;
+
+	to_ret = (void *)(to_free) + to_free->size + sizeof(t_blocks);
+	while (to_free)
+	{
+		to_ret -= sizeof(t_blocks) + to_free->size;
+		to_free = to_free->before;
+	}
+	return ((t_pages *)(to_ret - sizeof(t_pages)));
+}
+
+void			concatenate_blocks(t_blocks *to_free)
+{
 	if (to_free->before && to_free->before->allocated == 0)
 	{
-		page->size += sizeof(t_blocks);
 		to_free->before->size += to_free->size + sizeof(t_blocks);
 		to_free->before->next = to_free->next;
 		if (to_free->next)
@@ -26,7 +37,6 @@ void			free_tiny_and_small_page(t_blocks *to_free, t_pages *page)
 	}
 	if (to_free->next && to_free->next->allocated == 0)
 	{
-		page->size += sizeof(t_blocks);
 		to_free->size += to_free->next->size + sizeof(t_blocks);
 		to_free->next = to_free->next->next;
 		if (to_free->next)
@@ -34,65 +44,86 @@ void			free_tiny_and_small_page(t_blocks *to_free, t_pages *page)
 	}
 }
 
-int				check_if_in_page(void *ptr, t_pages *page)
+t_pages			**get_first_page(t_pages *main_page)
 {
-	t_blocks	*iterator;
+	if (main_page == g_pages_allocated.tiny_page)
+		return (&g_pages_allocated.tiny_page);
+	else if (main_page == g_pages_allocated.small_page)
+		return (&g_pages_allocated.small_page);
+	else if (main_page == g_pages_allocated.large_page)
+		return (&g_pages_allocated.large_page);
+	return (NULL);
+}
 
-	while (page)
+void			free_all_page(t_pages *to_free)
+{
+	t_pages		**type_page;
+
+	if ((type_page = get_first_page(to_free)))
 	{
-		iterator = page->blocks;
-		while (iterator)
+		*type_page = to_free->next;
+		if (*type_page)
+			(*type_page)->before = NULL;
+	}
+	else
+	{
+		to_free->before->next = to_free->next;
+		if (to_free->next)
+			to_free->next->before = to_free->before;
+	}
+	munmap((void *)(to_free), sizeof(t_pages) + to_free->size +
+		sizeof(t_blocks) + to_free->blocks->size);
+}
+
+int	search(t_blocks *to_find, t_pages *where)
+{
+	t_blocks	*tmp;
+
+	while (where)
+	{
+		tmp = where->blocks;
+		while(tmp)
 		{
-			if ((void *)(iterator) == ptr)
-			{
-				free_tiny_and_small_page(iterator, page);
+			if (tmp == to_find)
 				return (1);
-			}
-			iterator = iterator->next;
+			tmp = tmp->next;
 		}
-		page = page->next;
+		where = where->next;
 	}
 	return (0);
 }
 
-int				free_large_page(void *ptr, t_pages **page)
+void			free(void *ptr)
 {
-	t_pages		*to_free;
+	t_pages		*main_page;
+	t_blocks	*to_free;
 
-	to_free = *page;
-	while (to_free)
-	{
-		if ((void *)(to_free->blocks) == ptr)
-		{
-			if (to_free->before)
-				to_free->before->next = to_free->next;
-			else
-			{
-				*page = to_free->next;
-				if (to_free->next)
-					(*page)->before = NULL;
-			}
-			if (to_free->next)
-				to_free->next->before = to_free->before;
-			munmap(page, (to_free->size + to_free->blocks->size +
-				sizeof(t_blocks) + sizeof(t_pages)));
-			return (1);
-		}
-		to_free = to_free->next;
-	}
-	return (0);
-}
-
-void			ft_free(void *ptr)
-{
+	//ft_putstr("free: ");
+	//put_memory_hexa((size_t)(ptr));
+	//ft_putchar('\n');
+	ft_putstr("call free\n");
 	if (!ptr)
 		return ;
-	ptr -= sizeof(t_blocks);
-	if (check_if_in_page(ptr, g_pages_allocated.tiny_page) == 1 ||
-		check_if_in_page(ptr, g_pages_allocated.small_page) == 1)
-		return ;
-	else if (free_large_page(ptr, &g_pages_allocated.large_page) == 1)
-		return ;
+	to_free = (t_blocks *)(ptr - sizeof(t_blocks));
+	if (search(to_free, g_pages_allocated.tiny_page) == 1 ||
+		search(to_free, g_pages_allocated.small_page) == 1 ||
+		search(to_free, g_pages_allocated.large_page) == 1)
+	{
+		ft_putstr("free ptr\n");
+		if (to_free->allocated == 1)
+		{
+			to_free->allocated = 0;
+			main_page = get_main_page_of_block(to_free);
+			concatenate_blocks(to_free);
+			if (main_page->blocks->allocated == 0 && !main_page->blocks->next)
+				free_all_page(main_page);
+		}
+		ft_putstr("success free\n");
+	}
 	else
-		return ; /*add sig abort */
+	{
+		ft_putstr("fail to find adress: ");
+		put_memory_hexa((size_t)(ptr));
+		ft_putchar('\n');
+	}
 }
