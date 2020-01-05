@@ -6,7 +6,7 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/07 13:13:38 by msukhare          #+#    #+#             */
-/*   Updated: 2019/12/17 19:22:36 by msukhare         ###   ########.fr       */
+/*   Updated: 2020/01/05 13:43:53 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void			free(void *ptr)
 	//ft_putstr("free: ");
 	//put_memory_hexa((size_t)(ptr));
 	//ft_putchar('\n');
-	ft_putstr("call free\n");
+	//ft_putstr("call free\n");
 	if (!ptr)
 		return ;
 	to_free = (t_blocks *)(ptr - sizeof(t_blocks));
@@ -109,7 +109,7 @@ void			free(void *ptr)
 		search(to_free, g_pages_allocated.small_page) == 1 ||
 		search(to_free, g_pages_allocated.large_page) == 1)
 	{
-		ft_putstr("free ptr\n");
+		//ft_putstr("free ptr\n");
 		if (to_free->allocated == 1)
 		{
 			to_free->allocated = 0;
@@ -118,12 +118,13 @@ void			free(void *ptr)
 			if (main_page->blocks->allocated == 0 && !main_page->blocks->next)
 				free_all_page(main_page);
 		}
-		ft_putstr("success free\n");
+		//ft_putstr("success free\n");
 	}
 	else
 	{
 		ft_putstr("fail to find adress: ");
 		put_memory_hexa((size_t)(ptr));
 		ft_putchar('\n');
+		show_alloc_mem();
 	}
 }

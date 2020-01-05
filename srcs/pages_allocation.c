@@ -6,7 +6,7 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 09:58:34 by msukhare          #+#    #+#             */
-/*   Updated: 2019/12/17 19:22:38 by msukhare         ###   ########.fr       */
+/*   Updated: 2020/01/05 13:32:59 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void		*allocate_page(t_pages **page, size_t type, size_t size)
 
 	if (!(new_page = create_new_page(size, calculate_global_size(type, size))))
 	{
-		ft_putstr("return NULL\n");
+		//ft_putstr("return NULL\n");
 		return (NULL);
 	}
 	iterator = *page;

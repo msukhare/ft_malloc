@@ -6,7 +6,7 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 10:48:40 by msukhare          #+#    #+#             */
-/*   Updated: 2019/12/17 19:46:22 by msukhare         ###   ########.fr       */
+/*   Updated: 2020/01/05 13:32:18 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@ void			*create_new_block_at_end(t_pages *page, size_t size)
 {
 	t_blocks	*iterator;
 
-	ft_putstr("create new block\n");
+	//ft_putstr("create new block\n");
 	iterator = page->blocks;
 	while (iterator->next)
 		iterator = iterator->next;
@@ -34,11 +34,11 @@ void			*split_blocks(t_blocks *to_split, size_t size, t_pages *page)
 {
 	t_blocks	*new;
 
-	ft_putstr("split block\n");
+	//ft_putstr("split block\n");
 	to_split->allocated = 1;
 	if (size + sizeof(t_blocks) + 16 > to_split->size)
 	{
-		ft_putstr("don't split block \n");
+		//ft_putstr("don't split block \n");
 		return ((void *)(to_split) + sizeof(t_blocks));
 	}
 	new = (t_blocks *)((void *)(to_split) + sizeof(t_blocks) + size);
@@ -71,6 +71,6 @@ void			*get_allocated_page(t_pages *page, size_t size)
 			return (create_new_block_at_end(page, size));
 		page = page->next;
 	}
-	ft_putstr("return NULL in get allocated page\n");
+	//ft_putstr("return NULL in get allocated page\n");
 	return (NULL);
 }

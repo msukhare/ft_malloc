@@ -6,12 +6,12 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:47:03 by msukhare          #+#    #+#             */
-/*   Updated: 2019/12/17 19:31:29 by msukhare         ###   ########.fr       */
+/*   Updated: 2020/01/05 14:04:28 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef FT_MALLOC_H
-# define FT_MALLOC_H
+#ifndef MALLOC_H
+# define MALLOC_H
 
 # include <stdio.h>
 # include <sys/mman.h>
@@ -24,8 +24,6 @@
 
 # define TINY 512
 # define SMALL 2048
-
-# define ALIGNEMENT 16
 
 # define PROTECTION 		(PROT_READ | PROT_WRITE)
 # define FLAGS 				(MAP_SHARED | MAP_ANONYMOUS)

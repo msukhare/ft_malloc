@@ -95,7 +95,7 @@ NAME = libft.a
 
 CC = gcc
 
-CFLAGS = -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror -fPIC
 
 OBJ_NAME = $(SRC_NAME:.c=.o)
 

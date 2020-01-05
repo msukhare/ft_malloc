@@ -6,7 +6,7 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 11:05:32 by msukhare          #+#    #+#             */
-/*   Updated: 2019/12/18 13:52:32 by msukhare         ###   ########.fr       */
+/*   Updated: 2020/01/05 13:33:18 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,14 +59,14 @@ void			*reallocate_block(t_blocks *old_block, t_pages *main_page,
 		//put_memory_hexa((size_t)(to_ret));
 		//ft_putchar('\n');
 		//read_ptr(to_ret, size, "new malloced ptr realloc\n");
-		ft_putstr("return new ptr realloc\n");
+		//ft_putstr("return new ptr realloc\n");
 		return (to_ret);
 	}
 	//ft_putstr("return unchange allocation in realloc: ");
 	//put_memory_hexa((size_t)((void*)(old_block) + sizeof(t_blocks)));
 	//ft_putchar('\n');
 	//read_ptr((void *)(old_block) + sizeof(t_blocks), size, "old ptr in realloc\n");
-	ft_putstr("return old ptr realloc\n");
+	//ft_putstr("return old ptr realloc\n");
 	return ((void *)(old_block) + sizeof(t_blocks));
 }
 
@@ -74,7 +74,7 @@ void			*realloc(void *ptr, size_t size)
 {
 	t_blocks	*old_block;
 
-	ft_putstr("call realloc\n");
+	//ft_putstr("call realloc\n");
 	if (!ptr)
 		return (malloc(size));
 	if (size == 0)
@@ -83,7 +83,7 @@ void			*realloc(void *ptr, size_t size)
 		//ft_putstr("return free block: ");
 		//put_memory_hexa((size_t)(ptr));
 		//ft_putchar('\n');
-		ft_putstr("free ptr\n");
+		//ft_putstr("free ptr\n");
 		return (ptr);
 	}
 	old_block = (t_blocks *)(ptr - sizeof(t_blocks));
@@ -94,6 +94,6 @@ void			*realloc(void *ptr, size_t size)
 	//put_memory_hexa((size_t)(ptr));
 	//ft_putchar('\n');
 	//read_ptr(ptr, size, "nothing done in realloc\n");
-	ft_putstr("nothing done\n");
+	//ft_putstr("nothing done\n");
 	return (ptr);
 }

@@ -6,7 +6,7 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:46:56 by msukhare          #+#    #+#             */
-/*   Updated: 2019/12/18 22:08:38 by msukhare         ###   ########.fr       */
+/*   Updated: 2020/01/05 13:31:41 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,12 +57,12 @@ void				*malloc(size_t size)
 {
 	void			*to_ret;
 
-	ft_putstr("come to malloc\n");
+	//ft_putstr("come to malloc\n");
 	if (size == 0)
 	{
-		ft_putstr("return NULL size equal ");
-		ft_putnbr(size);
-		ft_putchar('\n');
+	//	ft_putstr("return NULL size equal ");
+	//	ft_putnbr(size);
+	//	ft_putchar('\n');
 		return (NULL);
 	}
 	if (size <= TINY)

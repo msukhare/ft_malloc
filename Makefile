@@ -6,7 +6,7 @@
 #    By: msukhare <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/03 15:51:13 by msukhare          #+#    #+#              #
-#    Updated: 2019/12/15 10:31:23 by msukhare         ###   ########.fr        #
+#    Updated: 2020/01/05 14:04:30 by msukhare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,7 +18,7 @@ SRC_NAME = malloc.c\
 		   calloc.c\
 		   pages_allocation.c\
 		   blocks_management.c\
-		   show_alloc_mem.c
+		   show_alloc_mem.c\
 
 OBJ_PATH = objs/
 
