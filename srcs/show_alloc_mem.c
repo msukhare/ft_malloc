@@ -6,7 +6,7 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/17 19:30:57 by msukhare          #+#    #+#             */
-/*   Updated: 2019/12/18 11:55:58 by msukhare         ###   ########.fr       */
+/*   Updated: 2020/02/19 09:04:05 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,42 +32,42 @@ void			put_memory_hexa(size_t adress)
 	ft_putstr(hexa);
 }
 
-void			read_pages(t_pages *page, char *type)
+void			read_pages(t_heaps *heap, char *type)
 {
-	t_blocks	*iterator;
+	t_chunks	*iterator;
 
-	while (page)
+	while (heap)
 	{
 		ft_putstr(type);
 		ft_putstr(" : ");
-		put_memory_hexa((size_t)((void *)(page)));
+		put_memory_hexa((size_t)((void *)(heap)));
 		ft_putchar('\n');
-		iterator = page->blocks;
+		iterator = heap->chunks;
 		while (iterator)
 		{
-			put_memory_hexa((size_t)((void *)(iterator) + sizeof(t_blocks)));
+			put_memory_hexa((size_t)((void *)(iterator) + sizeof(t_chunks)));
 			ft_putstr(" - ");
-			put_memory_hexa((size_t)((void *)(iterator) + sizeof(t_blocks) +
+			put_memory_hexa((size_t)((void *)(iterator) + sizeof(t_chunks) +
 				iterator->size));
 			ft_putstr(" : ");
 			ft_putnbr(iterator->size);
 			ft_putstr(" bytes\n");
 			iterator = iterator->next;
 		}
-		page = page->next;
+		heap = heap->next;
 	}
 }
 
 void			show_alloc_mem()
 {
 	ft_putstr(COLOR_TINY);
-	read_pages(g_pages_allocated.tiny_page, "TINY");
+	read_pages(g_heaps_allocated.tiny_heap, "TINY");
 	ft_putstr(END_COLOR);
 	ft_putstr(COLOR_SMALL);
-	read_pages(g_pages_allocated.small_page, "SMALL");
+	read_pages(g_heaps_allocated.small_heap, "SMALL");
 	ft_putstr(END_COLOR);
 	ft_putstr(COLOR_LARGE);
-	read_pages(g_pages_allocated.large_page, "LARGE");
+	read_pages(g_heaps_allocated.large_heap, "LARGE");
 	ft_putstr(END_COLOR);
 	ft_putstr("\n");
 }

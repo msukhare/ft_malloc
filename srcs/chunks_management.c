@@ -6,71 +6,70 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 10:48:40 by msukhare          #+#    #+#             */
-/*   Updated: 2020/01/05 13:32:18 by msukhare         ###   ########.fr       */
+/*   Updated: 2020/02/19 09:09:36 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/malloc.h"
 
-void			*create_new_block_at_end(t_pages *page, size_t size)
+void			*split_chunk(t_chunks *free_chunk, const size_t size)
 {
-	t_blocks	*iterator;
+	t_chunks	*new;
 
-	//ft_putstr("create new block\n");
-	iterator = page->blocks;
-	while (iterator->next)
-		iterator = iterator->next;
-	iterator->next = (t_blocks*)((void *)(iterator) + sizeof(t_blocks) +
-		iterator->size);
-	page->size -= size + sizeof(t_blocks);
-	iterator->next->size = size;
-	iterator->next->allocated = 1;
-	iterator->next->next = NULL;
-	iterator->next->before = iterator;
-	return ((void *)(iterator->next) + sizeof(t_blocks));
-}
-
-void			*split_blocks(t_blocks *to_split, size_t size, t_pages *page)
-{
-	t_blocks	*new;
-
-	//ft_putstr("split block\n");
-	to_split->allocated = 1;
-	if (size + sizeof(t_blocks) + 16 > to_split->size)
-	{
-		//ft_putstr("don't split block \n");
-		return ((void *)(to_split) + sizeof(t_blocks));
-	}
-	new = (t_blocks *)((void *)(to_split) + sizeof(t_blocks) + size);
+	ft_putstr("start split chunk\n");
+	free_chunk->allocated = 1;
+	if ((free_chunk->size - size) < ALIGNEMENT + sizeof(t_chunks))
+		return ((void *)(free_chunk) + sizeof(t_chunks));
+	new = (t_chunks *)((void *)(free_chunk) + size);
 	new->allocated = 0;
-	new->size = to_split->size - (size + sizeof(t_blocks));
-	new->next = to_split->next;
-	to_split->next = new;
-	new->before = to_split;
-	if (new->next)
-		new->next->before = new;
-	to_split->size = size;
-	page->size -= sizeof(t_blocks);
-	return ((void *)(to_split) + sizeof(t_blocks));
+	new->size = free_chunk->size - size - sizeof(t_chunks);
+	new->before = free_chunk;
+	new->next = free_chunk->next;
+	free_chunk->next = new;
+	return ((void *)(free_chunk) + sizeof(t_chunks));
 }
 
-void			*get_allocated_page(t_pages *page, size_t size)
+void			*create_new_chunk_at_end(t_heaps *heap, t_chunks *last,
+		const size_t size)
 {
-	t_blocks	*to_ret;
+	t_chunks	*new;
 
-	while (page)
+	heap->size -= size;
+	new = (t_chunks *)((void *)(last) + sizeof(t_chunks) + last->size);
+	last->next = new;
+	new->before = last;
+	new->next = NULL;
+	new->size = size - sizeof(t_chunks);
+	new->allocated = 1;
+	return ((void *)(new) + sizeof(t_chunks));
+}
+
+void			*get_available_memory(t_heaps *heaps, const size_t size)
+{
+	t_chunks	*iterator;
+	t_chunks	*before;
+
+	ft_putstr("OKOKOK\n");
+	while (heaps)
 	{
-		to_ret = page->blocks;
-		while (to_ret)
+		ft_putstr("startiteration\n");
+		iterator = heaps->chunks;
+		while (iterator)
 		{
-			if (to_ret->allocated == 0 && to_ret->size >= size)
-				return (split_blocks(to_ret, size, page));
-			to_ret = to_ret->next;
+			ft_putstr("salut\n");
+			ft_putnbr(iterator->size);
+			ft_putchar('\n');
+			put_memory_hexa((size_t)((void*)(iterator)));
+			ft_putchar('\n');
+			if (iterator->allocated == 0 && iterator->size >= size)
+				return (split_chunk(iterator, size));
+			before = iterator;
+			iterator = iterator->next;
 		}
-		if ((long long)(page->size - (size + sizeof(t_blocks))) >= 0)
-			return (create_new_block_at_end(page, size));
-		page = page->next;
+		ft_putstr("enditeration\n");
+		if ((long long)(heaps->size - size) >= 0)
+			return (create_new_chunk_at_end(heaps, before, size));
+		heaps = heaps->next;
 	}
-	//ft_putstr("return NULL in get allocated page\n");
 	return (NULL);
 }
