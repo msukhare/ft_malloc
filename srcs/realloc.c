@@ -6,7 +6,7 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/18 11:05:32 by msukhare          #+#    #+#             */
-/*   Updated: 2020/02/19 08:45:03 by msukhare         ###   ########.fr       */
+/*   Updated: 2020/02/19 09:40:38 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,9 @@ void			*realloc(void *ptr, size_t size)
 
 	if (!ptr)
 		return (malloc(size));
+	ft_putstr("start realloc: ");
+	put_memory_hexa((size_t)((void*)(ptr) - sizeof(t_chunks)));
+	ft_putchar('\n');
 	if (size == 0)
 	{
 		free(ptr);

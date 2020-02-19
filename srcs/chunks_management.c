@@ -6,7 +6,7 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/16 10:48:40 by msukhare          #+#    #+#             */
-/*   Updated: 2020/02/19 09:09:36 by msukhare         ###   ########.fr       */
+/*   Updated: 2020/02/19 09:57:55 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,13 +19,17 @@ void			*split_chunk(t_chunks *free_chunk, const size_t size)
 	ft_putstr("start split chunk\n");
 	free_chunk->allocated = 1;
 	if ((free_chunk->size - size) < ALIGNEMENT + sizeof(t_chunks))
+	{
+		ft_putstr("missing memory\n");
 		return ((void *)(free_chunk) + sizeof(t_chunks));
+	}
 	new = (t_chunks *)((void *)(free_chunk) + size);
 	new->allocated = 0;
 	new->size = free_chunk->size - size - sizeof(t_chunks);
 	new->before = free_chunk;
 	new->next = free_chunk->next;
 	free_chunk->next = new;
+	ft_putstr("enought memory\n");
 	return ((void *)(free_chunk) + sizeof(t_chunks));
 }
 
@@ -61,6 +65,9 @@ void			*get_available_memory(t_heaps *heaps, const size_t size)
 			ft_putchar('\n');
 			put_memory_hexa((size_t)((void*)(iterator)));
 			ft_putchar('\n');
+			ft_putnbr(size);
+			ft_putchar('\n');
+
 			if (iterator->allocated == 0 && iterator->size >= size)
 				return (split_chunk(iterator, size));
 			before = iterator;
