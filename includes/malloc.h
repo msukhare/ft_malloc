@@ -6,7 +6,7 @@
 /*   By: msukhare <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/12/06 14:47:03 by msukhare          #+#    #+#             */
-/*   Updated: 2020/01/05 14:04:28 by msukhare         ###   ########.fr       */
+/*   Updated: 2020/02/19 09:04:10 by msukhare         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,10 +20,12 @@
 # include <unistd.h>
 # include "../libft/include/libft.h"
 
-/* define all page size available */
+/* define all heap size available */
 
-# define TINY 512
-# define SMALL 2048
+# define TINY				1024
+# define SMALL				127e3
+
+# define ALIGNEMENT			16
 
 # define PROTECTION 		(PROT_READ | PROT_WRITE)
 # define FLAGS 				(MAP_SHARED | MAP_ANONYMOUS)
@@ -35,43 +37,45 @@
 
 /* Create all structurs which are useful*/
 
-typedef struct				s_blocks
+typedef struct				s_chunks
 {
-	size_t					size;
 	short int				allocated;
-	struct s_blocks			*next;
-	struct s_blocks			*before;
-}							t_blocks;
-
-typedef struct				s_pages
-{
-	t_blocks				*blocks;
 	size_t					size;
-	struct s_pages			*next;
-	struct s_pages			*before;
-}							t_pages;
+	struct s_chunks			*next;
+	struct s_chunks			*before;
+}							t_chunks;
 
-typedef struct				s_pages_allocated
+typedef struct				s_heaps
 {
-	t_pages					*tiny_page;
-	t_pages					*small_page;
-	t_pages					*large_page;
-}							t_pages_allocated;
+	size_t					size;
+	t_chunks				*chunks;
+	struct s_heaps			*next;
+	struct s_heaps			*before;
+}							t_heaps;
 
-extern t_pages_allocated	g_pages_allocated;
+typedef struct				s_heaps_allocated
+{
+	t_heaps					*tiny_heap;
+	t_heaps					*small_heap;
+	t_heaps					*large_heap;
+}							t_heaps_allocated;
+
+extern t_heaps_allocated	g_heaps_allocated;
 
 /* internal function to librairy */
-void						*allocate_page(t_pages **page, size_t type,
+void						*allocate_heap(t_heaps **heaps, size_t type,
 		size_t size);
-void						*get_allocated_page(t_pages *page, size_t size);
-t_pages						*get_main_page_of_block(t_blocks *to_free);
-void	put_memory_hexa(size_t adress);
-void	read_ptr(void *ptr, size_t size, char *mess);
+void						*get_available_memory(t_heaps *heaps,\
+		const size_t size);
+t_heaps			*			get_main_heap_of_chunk(t_chunks *to_free);
+
+
+int	search(t_chunks *to_find, t_heaps *where);
+void			put_memory_hexa(size_t adress);
+
 
 /*functions of librairy */
-void						free(void *ptr);
 void						*malloc(size_t size);
-void						*realloc(void *ptr, size_t size);
+void						free(void *ptr);
 void						show_alloc_mem();
-void						*calloc(size_t nmemb, size_t size);
 #endif
