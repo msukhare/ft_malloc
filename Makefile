@@ -6,19 +6,18 @@
 #    By: msukhare <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/12/03 15:51:13 by msukhare          #+#    #+#              #
-#    Updated: 2020/01/05 14:04:30 by msukhare         ###   ########.fr        #
+#    Updated: 2020/02/19 07:13:09 by msukhare         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRC_PATH = srcs/
 
 SRC_NAME = malloc.c\
-		   free.c\
-		   realloc.c\
-		   calloc.c\
-		   pages_allocation.c\
-		   blocks_management.c\
-		   show_alloc_mem.c\
+	   chunks_management.c\
+	   heaps_allocation.c\
+	   free.c\
+	   realloc.c\
+	   show_alloc_mem.c\
 
 OBJ_PATH = objs/
 
@@ -35,7 +34,7 @@ SRCLFT = libft/
 
 LFT = libft/libft.a
 
-CFLAGS = -g -Wall -Wextra -Werror
+CFLAGS = -Wall -Wextra -Werror
 
 DYNAMIC = -shared
 
